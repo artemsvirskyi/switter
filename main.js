@@ -1,40 +1,60 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import db from './db.json';
 
 const App = React.createClass({
 	getInitialState(){
-		return {items: []}
+		return {tweets: db.tweets, inputValue: ''}
 	},
 	onClick(){
-		const newItemText = this.refs.input.value;
+		const newTweetText = this.state.inputValue;
 
-		this.setState({items: this.state.items.concat(newItemText), text: ''});
+		if(!newTweetText){
+			return;
+		}
 
+		this.setState({tweets: this.state.tweets.concat(newTweetText), inputValue: ''});
 	},
-	componentWillMount(){
-		console.log(1);
-		setTimeout(() => {
-			console.log(document.getElementById('some'));
-		});
+	remove(key){
+		this.state.tweets.splice(key, 1);
+
+		this.setState({tweets: this.state.tweets});
+	},
+	onChange(e){
+		this.setState({inputValue: e.target.value});
 	},
 	render(){
 		return (
-			<div id="some">
-				<h3>TODO</h3>
-				<input type="text" ref="input" value={this.state.text}/>
+			<div>
+				<h3>My tweets</h3>
+				<Tweets tweets={this.state.tweets} onRemove={this.remove}></Tweets>
+				<input type="text" value={this.state.inputValue} onChange={this.onChange}/>
 				<button onClick={this.onClick}>add</button>
-				<TodoList items={this.state.items}></TodoList>
 			</div>
 		);
 	}
 });
 
-const TodoList = React.createClass({
+const Tweets = React.createClass({
 	render(){
 		return (
-			<ul>
-				{this.props.items.map(item => <li key={item}>{item}</li>)}
-			</ul>
+			<div>
+				{this.props.tweets.slice('').map((tweet, index) => <Tweet key={index} onRemove={this.props.onRemove} id={index}>{tweet}</Tweet>)}
+			</div>
+		);
+	}
+});
+
+const Tweet = React.createClass({
+	remove(){
+		this.props.onRemove(this.props.id);
+	},
+	render(){
+		return (
+			<div className="tweet">
+				<p>{this.props.children}</p>
+				<button onClick={this.remove}>remove tweet</button>
+			</div>
 		);
 	}
 });
