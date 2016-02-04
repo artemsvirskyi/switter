@@ -13,7 +13,7 @@ const App = React.createClass({
 			return;
 		}
 
-		this.setState({tweets: this.state.tweets.concat(newTweetText), inputValue: ''});
+		this.setState({tweets: [newTweetText].concat(this.state.tweets), inputValue: ''});
 	},
 	remove(key){
 		this.state.tweets.splice(key, 1);
@@ -27,9 +27,9 @@ const App = React.createClass({
 		return (
 			<div>
 				<h3>My tweets</h3>
-				<Tweets tweets={this.state.tweets} onRemove={this.remove}></Tweets>
 				<input type="text" value={this.state.inputValue} onChange={this.onChange}/>
 				<button onClick={this.onClick}>add</button>
+				<Tweets tweets={this.state.tweets} onRemove={this.remove}></Tweets>
 			</div>
 		);
 	}
@@ -39,21 +39,18 @@ const Tweets = React.createClass({
 	render(){
 		return (
 			<div>
-				{this.props.tweets.slice('').map((tweet, index) => <Tweet key={index} onRemove={this.props.onRemove} id={index}>{tweet}</Tweet>)}
+				{this.props.tweets.map((tweet, index) => <Tweet key={index} onRemove={this.props.onRemove} id={index}>{tweet}</Tweet>)}
 			</div>
 		);
 	}
 });
 
 const Tweet = React.createClass({
-	remove(){
-		this.props.onRemove(this.props.id);
-	},
 	render(){
 		return (
 			<div className="tweet">
 				<p>{this.props.children}</p>
-				<button onClick={this.remove}>remove tweet</button>
+				<button onClick={this.props.onRemove.bind(null, this.props.id)}>remove tweet</button>
 			</div>
 		);
 	}

@@ -1,12 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-module.exports={
-	"tweets": [
-		"Awesome! https://github.com/sindresorhus/awesome …",
-		"Catch that! As a Christmas present. ;) Totally free computer-science program - https://github.com/open-source-society/computer-science …",
-		"The End of Global CSS https://medium.com/seek-ui-engineering/the-end-of-global-css-90d2a4a06284 …"
-	]
-}
-},{}],2:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -17,99 +9,120 @@ var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _db = require('./db.json');
+var _classnames = require('classnames');
 
-var _db2 = _interopRequireDefault(_db);
+var _classnames2 = _interopRequireDefault(_classnames);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var App = _react2.default.createClass({
 	displayName: 'App',
 	getInitialState: function getInitialState() {
-		return { tweets: _db2.default.tweets, inputValue: '' };
+		return { currentIndex: 0 };
 	},
-	onClick: function onClick() {
-		var newTweetText = this.state.inputValue;
-
-		if (!newTweetText) {
-			return;
-		}
-
-		this.setState({ tweets: this.state.tweets.concat(newTweetText), inputValue: '' });
-	},
-	remove: function remove(key) {
-		this.state.tweets.splice(key, 1);
-
-		this.setState({ tweets: this.state.tweets });
-	},
-	onChange: function onChange(e) {
-		this.setState({ inputValue: e.target.value });
+	change: function change(index) {
+		this.setState({ currentIndex: index });
 	},
 	render: function render() {
 		return _react2.default.createElement(
 			'div',
 			null,
-			_react2.default.createElement(
-				'h3',
-				null,
-				'My tweets'
-			),
-			_react2.default.createElement(Tweets, { tweets: this.state.tweets, onRemove: this.remove }),
-			_react2.default.createElement('input', { type: 'text', value: this.state.inputValue, onChange: this.onChange }),
-			_react2.default.createElement(
-				'button',
-				{ onClick: this.onClick },
-				'add'
-			)
+			_react2.default.createElement(Menu, { index: this.state.currentIndex, onChange: this.change }),
+			_react2.default.createElement(Pages, { index: this.state.currentIndex })
 		);
 	}
 });
 
-var Tweets = _react2.default.createClass({
-	displayName: 'Tweets',
-	render: function render() {
+var Menu = _react2.default.createClass({
+	displayName: 'Menu',
+	getButtons: function getButtons(activeIndex) {
 		var _this = this;
 
-		return _react2.default.createElement(
-			'div',
-			null,
-			this.props.tweets.slice('').map(function (tweet, index) {
-				return _react2.default.createElement(
-					Tweet,
-					{ key: index, onRemove: _this.props.onRemove, id: index },
-					tweet
-				);
-			})
-		);
-	}
-});
+		return ['me', 'likes', 'tweets'].map(function (text, index) {
+			var btnClass = (0, _classnames2.default)({
+				active: activeIndex === index
+			});
 
-var Tweet = _react2.default.createClass({
-	displayName: 'Tweet',
-	remove: function remove() {
-		this.props.onRemove(this.props.id);
+			return _react2.default.createElement(
+				'button',
+				{ onClick: _this.props.onChange.bind(null, index), className: btnClass, key: index },
+				text
+			);
+		});
 	},
 	render: function render() {
 		return _react2.default.createElement(
 			'div',
-			{ className: 'tweet' },
-			_react2.default.createElement(
-				'p',
-				null,
-				this.props.children
-			),
-			_react2.default.createElement(
-				'button',
-				{ onClick: this.remove },
-				'remove tweet'
-			)
+			{ className: 'menu' },
+			this.getButtons(this.props.index)
+		);
+	}
+});
+
+var Pages = _react2.default.createClass({
+	displayName: 'Pages',
+	render: function render() {
+		return _react2.default.createElement(
+			'div',
+			null,
+			this.props.index
 		);
 	}
 });
 
 _reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('app'));
 
-},{"./db.json":1,"react":160,"react-dom":31}],3:[function(require,module,exports){
+},{"classnames":2,"react":160,"react-dom":31}],2:[function(require,module,exports){
+/*!
+  Copyright (c) 2016 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+	'use strict';
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames () {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg)) {
+				classes.push(classNames.apply(null, arg));
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
+				}
+			}
+		}
+
+		return classes.join(' ');
+	}
+
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = classNames;
+	} else if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
+		// register as 'classnames', consistent with npm package name
+		define('classnames', [], function () {
+			return classNames;
+		});
+	} else {
+		window.classNames = classNames;
+	}
+}());
+
+},{}],3:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -19141,4 +19154,4 @@ module.exports = validateDOMNesting;
 
 module.exports = require('./lib/React');
 
-},{"./lib/React":55}]},{},[2]);
+},{"./lib/React":55}]},{},[1]);
