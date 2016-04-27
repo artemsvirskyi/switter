@@ -4,14 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "watchify menu.js -o bundle.js -v"
+    "start": "watchify public/main.js -o public/bundle.js -v"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "classnames": "^2.2.3",
+    "express": "^4.13.4",
     "react": "^0.14.6",
-    "react-dom": "^0.14.6"
+    "react-dom": "^0.14.6",
+    "react-router": "^2.0.0"
   },
   "browserify": {
     "transform": [

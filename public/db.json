@@ -1,0 +1,22 @@
+{
+	"myTweets": [
+		"Awesome! https://github.com/sindresorhus/awesome …",
+		"Catch that! As a Christmas present. ;) Totally free computer-science program - https://github.com/open-source-society/computer-science …",
+		"The End of Global CSS https://medium.com/seek-ui-engineering/the-end-of-global-css-90d2a4a06284 …"
+	],
+	"likes": [],
+	"tweets": [
+		{
+			"author": "substack",
+			"text": "the people of Los Angeles seem curiously amused by my winter hat, a rare sight I'm sure"
+		},
+		{
+			"author": "Разработчик",
+			"text": "А кстати, никто не пробовал вообще без своего бэка делать? С тем же firebase, например "
+		},
+		{
+			"author": "Хабрахабр",
+			"text": "Мобильная разработка: http://habr.ru/p/278769/ . Расширяемый код Android-приложений с Model-View-Presenter."
+		}
+	]
+}
